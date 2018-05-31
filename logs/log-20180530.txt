@@ -1,0 +1,7 @@
+2018-05-30 21:40:31.665 -04:00 [Information] herllo logger
+2018-05-30 21:41:09.518 -04:00 [Information] User profile is available. Using '"/home/geoff/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2018-05-30 21:41:22.856 -04:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/  
+2018-05-30 21:41:24.618 -04:00 [Information] Executed action "/Index" in 37.6955ms
+2018-05-30 21:41:24.624 -04:00 [Information] Request finished in 1776.1266ms 200 text/html; charset=utf-8
+2018-05-30 21:42:41.896 -04:00 [Information] hello logger
+2018-05-30 21:43:13.063 -04:00 [Information] hello logger again
