@@ -12,7 +12,7 @@ using newsbythenumbers.Models;
 
 namespace newsbythenumbers.Managers
 {
-    public class ArticleManager : BaseManager
+    public class ArticleManager : BaseManager , IArticleManager
     {
         private IMemoryCache _cache;
         private ApiSettings _settings;
@@ -26,50 +26,56 @@ namespace newsbythenumbers.Managers
             dbname = _settings.DBName;
         }
 
-        public List<Article> GetCategory(int categoryid)
+        public async Task <List<Article>> GetCategory(int categoryid)
          {
-            List<Article> articles = new  List<Article> ();
-
-            using (var db = new LiteDatabase(dbname))
+            return await Task.Run(() =>
             {
-                var col = db.GetCollection<Article>("articles");
+                using (var db = new LiteDatabase(dbname))
+                {
+                    var col = db.GetCollection<Article>("articles");
 
-                articles = col.Find(a => a.CategoryId == categoryid 
+                   return col.Find(a => a.CategoryId == categoryid 
                                     && a.DateStamp > DateTime.Now.AddDays(-1)).ToList();
-            }
-
-            return articles;
+                } 
+            });
          }
 
-        public List<Article> GetLatest()
-         {
+        public async Task<List<Article>> GetLatest()
+        {
             List<Article> articles = new  List<Article> ();
 
             int daysDiff = -_settings.RecentDaysLookback;
 
-            using (var db = new LiteDatabase(dbname))
+            return await Task.Run(() =>
             {
-                var col = db.GetCollection<Article>("articles");
+                using (var db = new LiteDatabase(dbname))
+                {
+                    var col = db.GetCollection<Article>("articles");
 
-                articles = col.Find(a => a.DateStamp > DateTime.Now.AddDays(daysDiff)).ToList();
-            }
+                   return col.Find(a => a.DateStamp > DateTime.Now.AddDays(daysDiff)).ToList();
+                } 
+            });            
+        }
 
-            return articles;
-         }
-
-
-        public Article GetOne(Guid guid)
+        public  async Task<Article> GetOne(Guid guid)
          {
-            Article article = new  Article();
-
-            using (var db = new LiteDatabase(ConnectionString))
+            return await Task.Run(() =>
             {
-                var col = db.GetCollection<Article>("articles");
+                using (var db = new LiteDatabase(dbname))
+                { 
+                   var col = db.GetCollection<Article>("articles");
 
-                article = col.Find(a => a.Id == guid).FirstOrDefault();
-            }
+                   var article =  new Article(); //col.Find(a => a.Id == guid).FirstOrDefault();
 
-            return article;
+                    article.Id = guid;
+
+                    article.Title = "The title";
+
+                    article.Body = "This is the body";
+
+                   return article;
+                } 
+            });        
          }
     }
 }
